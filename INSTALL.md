@@ -16,6 +16,7 @@ This guide covers installing and running Claude Code on a self-hosted QNX develo
 If Node.js and npm are not yet installed:
 
 ```sh
+sudo apk update
 sudo apk add npm
 ```
 
@@ -80,33 +81,40 @@ those files, not about runtime compatibility.
 ```sh
 cd /usr/lib/claude-code
 npm install
+npm list --depth=0
 ```
 
-## Step 4 — Set your API key (optional)
+`npm list --depth=0` is a quick sanity check — it should show `ws` and
+`js-yaml` installed with no `UNMET DEPENDENCY` warnings. If either is
+missing, re-run `npm install` before moving on.
 
-If you have an Anthropic API key you can set it as an environment variable:
-
-```sh
-export ANTHROPIC_API_KEY=sk-ant-...
-```
-
-Add this to your shell profile (`~/.profile` or `~/.bashrc`) to make it permanent.
-
-If you skip this step, `claude-qnx` will prompt you for a key on first run and provide a URL to obtain one.
-
-## Step 5 — Add `claude-qnx` to your PATH
+## Step 4 — Add `claude-qnx` to your PATH
 
 ```sh
 sudo chmod +x /usr/lib/claude-code/claude-qnx
 sudo ln -s /usr/lib/claude-code/claude-qnx /usr/bin/claude-qnx
 ```
 
-## Step 6 — Run Claude Code
+## Step 5 — Run Claude Code
+
+Run it from outside the install directory, so you're also confirming the
+`PATH` symlink from Step 4 actually resolves:
 
 ```sh
-claude-qnx --version
+cd && claude-qnx --version
 claude-qnx
 ```
+
+> **Optional — API key.** Set `ANTHROPIC_API_KEY` as an environment variable
+> (add it to `~/.profile` or `~/.bashrc` to make it permanent) if you want
+> to skip the interactive prompt:
+>
+> ```sh
+> export ANTHROPIC_API_KEY=sk-ant-...
+> ```
+>
+> If you skip this, `claude-qnx` will prompt you for a key on first run and
+> provide a URL to obtain one.
 
 ---
 
@@ -127,7 +135,7 @@ node /usr/lib/claude-code/extract-chunks.js --version 2.1.245
 
 | Variable | Purpose |
 |---|---|
-| `ANTHROPIC_API_KEY` | Your Anthropic API key (required) |
+| `ANTHROPIC_API_KEY` | Your Anthropic API key (optional — skips the first-run prompt) |
 | `CLAUDE_CODE_DIR` | Override the install directory (default: directory containing the `claude-qnx` script) |
 | `CLAUDE_CODE_JS` | Legacy layout only: override the path to `claude-code.js` (default: `$CLAUDE_CODE_DIR/claude-code.js`) |
 | `CLAUDE_CODE_MANIFEST` | Chunked layout only: override the path to `bunfs-manifest.json` (default: `$CLAUDE_CODE_DIR/bunfs-manifest.json`) |
