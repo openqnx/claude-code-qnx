@@ -30,12 +30,26 @@ Make sure `~/.local/bin` is in your `PATH`.
 
 ## Step 1 — Get the files onto your QNX system
 
-Clone this repository directly on your QNX system and take ownership of the install directory:
+Clone this repository directly on your QNX system and take ownership of the install directory.
+
+**If this chunked-layout support has already been merged into `main`:**
 
 ```sh
 sudo git clone https://github.com/qnx/claude-code-qnx.git /usr/lib/claude-code
 sudo chown -R $(whoami) /usr/lib/claude-code
 ```
+
+**If it's still an open, unmerged pull request** (e.g. you're following along
+before it's been reviewed, or the branch lives only on a fork), add
+`--branch <branch-name>` pointing at that PR's source branch and repository
+URL instead — for example:
+
+```sh
+sudo git clone https://github.com/<fork-owner>/claude-code-qnx.git --branch <branch-name> /usr/lib/claude-code
+sudo chown -R $(whoami) /usr/lib/claude-code
+```
+
+Everything from Step 2 onward is identical either way.
 
 ## Step 2 — Extract the JavaScript application
 
